@@ -1,4 +1,4 @@
-# LeeCode Solution every day
+# LeetCode Solution every day
 
 ## Easy
 - 反转整数: 
