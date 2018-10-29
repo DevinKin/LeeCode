@@ -1,0 +1,125 @@
+#+TITLE: LeetCode-合并两个有序链表
+#+CATEGORIES: LeetCode
+#+DESCRIPTION: 每天一题LeetCode
+#+KEYWORDS: LeetCode,Java
+#+DATE: 2018-10-29 23:23
+
+* Easy-合并两个有序链表
+** 题目描述
+将两个有序链表合并为一个新的有序链表并返回。新链表是通过拼接给定的两个链表的所有节点组成的。 
+
+示例：
+
+输入：1->2->4, 1->3->4
+
+输出：1->1->2->3->4->4
+
+
+* 自己的答案
+** 思路
+1. 如果l1或者l2其中一个为null,则返回null.
+2. 用res变量作为返回结果,并创建一个别名为tmp的变量
+3. 当l1当前值大于l2当前值,tmp的值为l2当前的值,并且l2移动到下一个节点.l1小于l2的情况类似.
+4. tmp的下一个变量初始化为0,并且tmp移动到下一个节点
+5. 直到l1或者l2其中一个到节点的尾部,循环结束,将未到达尾部的链表剩余部分归并到tmp.next,返回res
+** 代码
+#+BEGIN_SRC java
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public ListNode mergeTwoLists(ListNode l1, ListNode l2) {
+                ListNode res = new ListNode(0);
+        ListNode tmp = res;
+        // 有一个方为空,则返回另一方
+        if (l1 == null)
+            return l2;
+        if (l2 == null)
+            return l1;
+
+        // 开始遍历l1和l2
+        while (true) {
+
+            // l1链表的值大于l2链表的值
+            if (l1.val > l2.val) {
+                tmp.val = l2.val;
+                // l2为下一个节点
+                l2 = l2.next;
+            } else {
+                tmp.val = l1.val;
+                // l1为下一个节点
+                l1 = l1.next;
+            }
+            // 如果l1或者l2其中一个到了节点尾部,将另一个链表接到tmp上并直接返回
+            if (l1 == null) {
+                // l1没有元素,把l2的元素加到tmp结尾并返回
+                tmp.next = l2;
+                return res;
+            }
+
+            if (l2 == null) {
+                // l2没有元素,把l1的元素加到tmp结尾并返回
+                tmp.next = l1;
+                return res;
+            }
+            // 初始化新的节点,赋初值为0
+            tmp.next = new ListNode(0);
+            tmp = tmp.next;
+        }
+    }
+}
+#+END_SRC
+** 反思
+1. 为tmp初始化为0的步骤是冗余的步骤,增加了空间复杂度
+2. 对Java别名使用的不熟悉,函数传参,赋值等操作的均是按值传递,传递的是变量的地址
+3. 尽可能不用 ~while(true)~ ,容易出现死循环
+** 优化
+#+BEGIN_SRC java
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public ListNode mergeTwoLists(ListNode l1, ListNode l2) {
+       // 初始化一个res,值为0
+        ListNode res = new ListNode(0);
+        // 用tmp别名替代res,以免改变返回结果的指向
+        ListNode tmp = res;
+        // 有一个方为空,则返回另一方
+        if (l1 == null)
+            return l2;
+        if (l2 == null)
+            return l1;
+
+        // 开始遍历l1和l2
+        while (l1 != null && l2 != null) {
+            // l1链表的值大于l2链表的值
+            if (l1.val > l2.val) {
+                // tmp是别名,指向当前l2,l2改变的时候当前tmp值不会改变
+                tmp.next = l2;
+                // l2为下一个节点
+                l2 = l2.next;
+            } else {
+                // tmp是别名,指向当前l1,l1改变的时候当前tmp的值不会改变
+                tmp.next = l1;
+                // l1为下一个节点
+                l1 = l1.next;
+            }
+            tmp = tmp.next;
+        }
+        // 如果l1或者l2其中一个到了节点尾部,将另一个链表接到tmp上并直接返回
+        tmp.next = (l1 == null ? l2 : l1);
+        return res.next;
+    }
+}
+#+END_SRC
+

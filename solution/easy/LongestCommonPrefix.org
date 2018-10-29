@@ -1,0 +1,81 @@
+#+TITLE: LeetCode-最长公共前缀
+#+CATEGORIES: LeetCode
+#+DESCRIPTION: 每天一题LeetCode
+#+KEYWORDS: LeetCode,Java
+#+DATE: 2018-10-27 21:14
+
+* Easy-最长公共前缀
+** 题目描述
+编写一个函数来查找字符串数组中的最长公共前缀。
+
+如果不存在公共前缀，返回空字符串 ""。
+
+** 示例 1:
+输入: ["flower","flow","flight"]
+
+输出: "fl"
+
+** 示例 2:
+输入: ["dog","racecar","car"]
+
+输出: ""
+
+解释: 输入不存在公共前缀。
+
+** 说明:
+所有输入只包含小写字母 a-z 。
+
+* 自己的答案
+
+** 思路
+1. 以第一个字符串为示例,找出相同的最长前缀
+2. 首先判断输入的字符串数组是否为空,空则返回空字符串
+3. 用双层循环进行比较,第一层循环为遍历字符串数组,第二层循环遍历字符串的每个字符,与first字符串的字符进行比较
+3. 用一个int变量rec记录当前字符串与first匹配的索引位置并跳出循环,并以rec作为下一次遍历的范围,遍历下一个字符串
+4. 如果遍历i大于字符串长度,则同样用rec记录当前索引,并跳出内层循环
+5. 最后返回first字符串的子字符串,范围为0~rec
+
+** 代码
+#+BEGIN_SRC java
+package algorithm.easy;
+
+public class LongestCommonPrefix {
+    public static String longestCommonPrefix(String[] strs) {
+        if (strs.length < 1) {
+            return "";
+        }
+        String first = strs[0];
+        // rec记录其余字符串与第一个字符串相同的长度
+        int rec = first.length();
+
+
+        for (String str : strs) {
+            for (int i = 0; i < rec; i++) {
+                // i的长度等于其余字符串长度时,遍历下一个字符串
+                if (i >= str.length())  {
+                    rec = i;
+                    break;
+                }
+                if (str.charAt(i) != first.charAt(i)) {
+                    // 遍历数组下字符串的范围变小
+                    rec = i;
+                    // 到下一个字符串
+                    break;
+                }
+            }
+        }
+        // 直接返回记录索引结果
+        return first.substring(0,rec);
+    }
+
+    public static void main(String[] args) {
+        String[] strs = new String[] {"flower","flow","flight"};
+        String[] strs2 = new String[] {"dog","racecar","car"};
+        String[] strs3 = new String[] {"aa", "a"};
+        System.out.println(longestCommonPrefix(strs));
+        System.out.println(longestCommonPrefix(strs2));
+        System.out.println(longestCommonPrefix(strs3));
+    }
+}
+#+END_SRC
+
