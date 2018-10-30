@@ -1,0 +1,106 @@
+#+TITLE: LeetCode-删除排序数组中的重复项
+#+CATEGORIES: LeetCode
+#+DESCRIPTION: 每天一题LeetCode
+#+KEYWORDS: LeetCode,Java
+#+DATE: 2018-10-30 09:40
+
+* Easy-删除排序数组中的重复项
+** 题目描述
+给定一个排序数组，你需要在原地删除重复出现的元素，使得每个元素只出现一次，返回移除后数组的新长度。
+
+不要使用额外的数组空间，你必须在原地修改输入数组并在使用 $O(1)$  额外空间的条件下完成。
+** 示例 1:
+给定数组 nums = ~[1,1,2]~ , 
+
+函数应该返回新的长度 2, 并且原数组 nums 的前两个元素被修改为 ~1, 2~ 。 
+
+你不需要考虑数组中超出新长度后面的元素。
+** 示例 2:
+给定 nums = ~[0,0,1,1,1,2,2,3,3,4]~ ,
+
+函数应该返回新的长度 5, 并且原数组 nums 的前五个元素被修改为 ~0, 1, 2, 3, 4~ 。
+
+你不需要考虑数组中超出新长度后面的元素。
+** 说明:
+为什么返回数值是整数，但输出的答案是数组呢?
+
+请注意，输入数组是以“引用”方式传递的，这意味着在函数里修改输入数组对于调用者是可见的。
+
+你可以想象内部操作如下:
+
+* 自己解答
+** 思路
+1. 使用一个int变量len来记录返回的新长度,初始值为1.
+2. 先过滤了长度小于2或者为null的数组,数组长度为1,返回1,否则,返回0
+3. 遍历数组,如果当前元素的值不等于下一个元素的值,len加1(首次出现了不同的元素,跳过了重复项),并修改数组在索引为len-1的值(把不同的元素放在数组前几个元素中)
+4. 当i为数组元素的最后一个时,修改数组的值,并跳出循环
+** 代码
+#+BEGIN_SRC java
+package algorithm.easy;
+
+public class RemoveDuplicates {
+
+    public static int Solution(int[] nums) {
+        // len最小长度是1,从1开始记录
+        int len = 1;
+        // 数组长度小于2
+        if (nums.length < 2) {
+            // 数组长度小于1
+            if (nums.length < 1)
+                return 0;
+            else {
+                return 1;
+            }
+        }
+        for (int i = 0; i < nums.length; i++) {
+            // 到达数组尾部
+            if (i == nums.length - 1) {
+                // 修改数组的值,让最后一个元素与尾部的元素相等
+                nums[len - 1] = nums[i];
+                // 跳出循环
+                break;
+            }
+            if (nums[i] != nums[i + 1]) {
+                // 修改数组的值
+                nums[len - 1] = nums[i];
+                len += 1;
+            }
+        }
+        return len;
+    }
+
+    public static void main(String[] args) {
+        int[] nums1 = new int[] {0,0, 0,1,1,1,2,2,3,3,4,4,5,5,5,5,5};
+        System.out.println(Solution(nums1));
+    }
+}
+#+END_SRC
+
+* 官方解答
+** 方法
+双指针法
+
+** 算法
+数组完成排序后，我们可以放置两个指针 $i$ 和 $j$ ，其中 $i$ 是慢指针，而 $j$ 是快指针。只要 $nums[i] = nums[j]$ ，我们就增加 $j$ 以跳过重复项。
+
+当我们遇到 $nums[j] \neq nums[i]$ 时，跳过重复项的运行已经结束，因此我们必须把它（ $nums[j]$ ）的值复制到 $nums[i + 1]$ 。然后递增 $i$ ，接着我们将再次重复相同的过程，直到 $j$ 到达数组的末尾为止。
+
+** 代码
+#+BEGIN_SRC java
+public int removeDuplicates(int[] nums) {
+    if (nums.length == 0) return 0;
+    int i = 0;
+    for (int j = 1; j < nums.length; j++) {
+        if (nums[j] != nums[i]) {
+            i++;
+            nums[i] = nums[j];
+        }
+    }
+    return i + 1;
+}
+#+END_SRC
+
+** 复杂度分析
+- 时间复杂度：$O(n)$ ， 假设数组的长度是 $n$ ，那么 $i$ 和 $j$ 分别最多遍历 n 步。
+
+- 空间复杂度：$O(1)$ 。
