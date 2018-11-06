@@ -1,0 +1,81 @@
+#+TITLE: LeetCode-最后一个单词的长度
+#+CATEGORIES: LeetCode
+#+DESCRIPTION: 每天一题LeetCode
+#+KEYWORDS: LeetCode,Java
+#+DATE: 2018-11-06 15:09
+
+* Easy-最后一个单词的长度
+** 题目描述
+给定一个仅包含大小写字母和空格 ' ' 的字符串，返回其最后一个单词的长度。
+
+如果不存在最后一个单词，请返回 0 。
+
+说明：一个单词是指由字母组成，但不包含任何空格的字符串。
+
+** 示例:
+
+输入: "Hello World"
+
+输出: 5
+
+
+* 自己的解答
+** 思路
+1. 做这题时候有两个思路
+   - 第一个思路是: 将字符串以" "分隔符切分为多个字符串,然后取出最后一个字符串的长度即可
+   - 第二个思路是: 从后往前遍历字符串s,先去除掉字符串尾部的空格字符,然后在计算最后一个字符串的长度.
+2. 第一个思路实现方法极其简单,但是会浪费空间,而且实现的效率并不高,浪费了空间节省不了时间.
+3. 第二个思路用时比较短,速度更快.
+
+** 代码
+*** 第一个思路代码
+#+BEGIN_SRC java
+  package algorithm.easy;
+
+  public class LengthOfLastWord {
+      public static int solution(String s) {
+          String strs = s.split(" ");
+          return strs[strs.length - 1].length();
+      }
+
+      public static void main(String[] args) {
+          System.out.println(solution("   day"));
+      }
+  }
+#+END_SRC
+*** 第二个思路代码
+#+BEGIN_SRC java
+package algorithm.easy;
+
+public class LengthOfLastWord {
+    public static int solution(String s) {
+       int len = 0;
+       int tail = s.length() - 1;
+       if (s == null || s.length() < 0) {
+           return 0;
+       }
+
+       // 先去除尾部的空格,出现非空格字符串,跳出循环
+       for (int i = tail; i >=0 ; i--) {
+            if (s.charAt(i) == ' ') {
+                tail--;
+            } else {
+                break;
+            }
+        }
+
+        for (int i = tail; i >=0; i--) {
+            if (s.charAt(i) == ' ') {
+                return len;
+            } else {
+                len++;
+            }
+        }
+        return len;
+    }
+
+    public static void main(String[] args) {
+        System.out.println(solution("   day"));
+    }
+}
+#+END_SRC
