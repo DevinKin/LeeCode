@@ -1,0 +1,167 @@
+#+TITLE: LeetCode-二进制求和
+#+CATEGORIES: LeetCode
+#+DESCRIPTION: 每天一题LeetCode
+#+KEYWORDS: LeetCode,Java
+#+DATE: 2018-11-06 21:00
+
+* Easy-二进制求和
+** 题目描述
+给定两个二进制字符串，返回他们的和（用二进制表示）。
+
+输入为非空字符串且只包含数字 1 和 0。
+
+** 示例 1:
+输入: a = "11", b = "1"
+
+输出: "100"
+
+** 示例 2:
+输入: a = "1010", b = "1011"
+
+输出: "10101"
+
+* 自己的解答
+** 思路
+1. 使用a和b中较长者作为循环终止条件,遍历a和b字符串.逆序遍历,比较符合普通人理解的二进制求和方法.
+2. 定义一个变量up,表示是否有进位,'1'为有进位,'0'为没有进位.
+3. 将a和b当前位置的字符加上进位符up,再减去两个'0'字符,即得到当前位的和c.
+   - 如果当前位的和c大于'2',说明有进位,将up更新为'1'.并将c减去'2'之后插入到StringBuilder变量的首端.
+   - 如果当前位置的和c小于'2',说明没有进位,将up更新为'0',并将c插入到StringBuilder变量的首端.
+4. 当a和b其中一方已经遍历完后,未遍历完的一方放入StringBuilder变量的首端,同时要判断是否由进位.
+5. 在循环结束之后,如果进位符没有被恢复为'0',说明最后有进位,需要在StringBuilder变量首端插入'1'.
+
+** 反思
+1. 思路是正确的,但是实现起来太过复杂.
+2. 以后遇到此种情况可以转换思路,如果操作String不方便,可以将String变为int,来计算二进制的和.
+   - 例如:用int变量sum记录a和b对应位置字符的和,然后sum%2就是当前位置字符的int形式,并将其添加到StringBuilder中.是否有进位可以通过sum/2判断,并可以将carry作为下一次sum的初始值.
+** 代码
+*** 自己的代码
+#+BEGIN_SRC java
+package algorithm.easy;
+
+public class AddBinary {
+    public static String solution(String a, String b) {
+        StringBuilder sb = new StringBuilder();
+        int alen = a.length();
+        int blen = b.length();
+        int N = alen > blen ? alen : blen;
+        char up = '0';
+        char c = ' ';
+        for (int i = 1; i <= N; i++) {
+            int ai = a.length() - i;
+            int bi = b.length() - i;
+            if (ai < 0) {
+                // b比a长
+                // 有上一位的进位
+                if (up == '1') {
+                    c = (char) (b.charAt(bi) + up - '0');
+                    if (c < '2') {
+                        sb.insert(0, c);
+                        // 恢复上一位进位
+                        if (up != '0') {
+                            up = '0';
+                        }
+                    } else {
+                        if (up != '1') {
+                            // 有进位
+                            up = '1';
+                        }
+                        sb.insert(0, '0');
+                    }
+                    continue;
+                } else {
+                    // 没进位,直接把剩余的字符串插入即可
+                    sb.insert(0, b.substring(0, bi + 1));
+                    break;
+                }
+            }
+            if (bi < 0) {
+                // a比b长
+                // 有上一位的进位
+                if (up == '1') {
+                    c = (char) (a.charAt(ai) + up - '0');
+                    if (c < '2') {
+                        sb.insert(0, c);
+                        // 恢复上一位进位
+                        if (up != '0') {
+                            up = '0';
+                        }
+                    } else {
+                        if (up != '1') {
+                            // 有进位
+                            up = '1';
+                        }
+                        sb.insert(0, '0');
+                    }
+                    continue;
+                } else {
+                    // 没进位,直接把剩余的字符串插入即可
+                    sb.insert(0, a.substring(0, ai + 1));
+                    break;
+                }
+            }
+            c = (char) (a.charAt(ai) + b.charAt(bi) + up - '0' - '0');
+            if (c < '2') {
+                // 插入到sb中
+                sb.insert(0, c);
+                // 恢复上一位进位
+                if (up != '0') {
+                    up = '0';
+                }
+            } else {
+                if (up != '1') {
+                    // 有进位
+                    up = '1';
+                }
+                c = (char) (c - '2' + '0');
+                // 插入到sb中
+                sb.insert(0, c);
+            }
+        }
+        // 到最后还有进位,则插入1一个1,否则不插入
+        if (up == '1') {
+            sb.insert(0, '1');
+        }
+
+        return sb.toString();
+    }
+
+    public static void main(String[] args) {
+        System.out.println(solution("1010","1011"));
+        System.out.println(solution("11","1"));
+        System.out.println(solution("110","110010"));
+        System.out.println(solution("101111","10"));
+        System.out.println(solution("0", "0"));
+        System.out.println(solution("100", "110010"));
+    }
+}
+#+END_SRC
+
+*** 别人的代码
+#+BEGIN_SRC java
+class Solution {
+    public String addBinary(String a, String b) {
+        StringBuilder sb = new StringBuilder();
+        int i = a.length() - 1;
+        int j = b.length() - 1;
+        int carry = 0;
+        while (i >= 0 || j >= 0) {
+            int sum = carry;
+            if (i >= 0) {
+                sum += (a.charAt(i) - '0');
+                i--;
+            }
+            if (j >= 0) {
+                sum += (b.charAt(j) - '0');
+                j--;
+            }
+            sb.append(sum % 2);
+            carry = sum / 2;
+        }
+        if (carry != 0){
+            sb.append(1);
+        }
+        return sb.reverse().toString();
+    }
+}
+#+END_SRC
