@@ -1,0 +1,119 @@
+#+TITLE: LeetCode-加一
+#+CATEGORIES: LeetCode
+#+DESCRIPTION: 每天一题LeetCode
+#+KEYWORDS: LeetCode,Java
+#+DATE: 2018-11-06 16:21
+
+* Easy-加一
+** 题目描述
+给定一个由整数组成的非空数组所表示的非负整数，在该数的基础上加一。
+
+最高位数字存放在数组的首位， 数组中每个元素只存储一个数字。
+
+你可以假设除了整数 0 之外，这个整数不会以零开头。
+
+** 示例 1:
+输入: [1,2,3]
+
+输出: [1,2,4]
+
+解释: 输入数组表示数字 123。
+
+** 示例 2:
+输入: [4,3,2,1]
+
+输出: [4,3,2,2]
+
+解释: 输入数组表示数字 4321。
+
+
+* 自己的解答
+** 思路
+1. 当数组的数全为9时,需要重新构建数组返回.
+2. 当数组的数不全为9时,对数组最后一个元素是否为9,不是9,没有进位,直接+1返回数组.
+3. 循环遍历数组,如果当前元素大于等于9,将当前元素设置为0,下一个元素+1,判断下一个元素的值是否小于10(没有进位),没有则直接返回数组.
+   
+** 反思
+1. 代码比较复杂,在看到别人的解答时候简洁清晰,对思路的整理以及编码的质量仍需提高.
+2. 别人的思路: 
+   - 从后往前遍历数组,对数组的元素+1,并判断当前元素的值是否小于10(没有进位),没有则跳出循环.有(大于等于10)则将当前元素-10.
+   - 当数组的第一位为0时,需要重新构建数组并返回.
+
+** 代码
+*** 自己的代码
+#+BEGIN_SRC java
+package algorithm.easy;
+
+public class PlusOne {
+    public static int[] solution(int[] digits) {
+        int tail = digits.length - 1;
+        boolean flag = false;
+        // 全为9的时候,需要重新构建数组返回
+        for (int i = 0; i <= tail; i++) {
+            if (digits[i] != 9) {
+                flag = true;
+                break;
+            }
+        }
+
+        if (!flag) {
+            // 重新构建数组
+            int[] res = new int[digits.length + 1];
+            res[0] = 1;
+            for (int i = 1; i < res.length; i++) {
+                res[i] = 0;
+            }
+            return res;
+        } else {
+            // 末尾元素小于9
+            if (digits[tail] < 9) {
+                digits[tail] += 1;
+                return digits;
+            }
+            for (int i = tail; i > 0; i--) {
+                // 如果当前元素大于等于9,进位,下一位加1,当前位为0
+                if (digits[i] >= 9) {
+                    digits[i] = 0;
+                    digits[i - 1] += 1;
+                    // 没有进位,跳出循环
+                    if (digits[i - 1] < 10) {
+                        break;
+                    }
+                }
+            }
+        }
+
+        return digits;
+    }
+
+    public static void main(String[] args) {
+
+    }
+}
+#+END_SRC
+
+*** 别人的代码
+#+BEGIN_SRC java
+class Solution {
+    public int[] plusOne(int[] digits) {
+        int N=digits.length;
+        for(int i=N-1;i>=0;i--){
+            digits[i]+=1;
+            if(digits[i]<10){
+                break;
+            }else {
+                digits[i]-=10;
+            }
+        }
+        if(digits[0]==0){
+            int []arr=new int[digits.length+1];
+            arr[0]=1;
+            for(int i=0;i<digits.length;i++){
+                arr[i+1]=digits[i];
+            }
+            digits=arr;
+        }
+        return digits;
+    }
+}
+#+END_SRC
