@@ -1,0 +1,61 @@
+#+TITLE: LeetCode-x的平方根
+#+CATEGORIES: LeetCode
+#+DESCRIPTION: 每天一题LeetCode
+#+KEYWORDS: LeetCode,Java
+#+DATE: 2018-11-08 19:29
+
+* Easy-x的平方根
+** 题目描述
+实现 ~int sqrt(int x)~ 函数。
+
+计算并返回 ~x~ 的平方根，其中 ~x~ 是非负整数。
+
+由于返回类型是整数，结果只保留整数的部分，小数部分将被舍去。
+
+** 示例 1:
+输入: 4
+
+输出: 2
+
+** 示例 2:
+输入: 8
+
+输出: 2
+
+说明: 8 的平方根是 2.82842..., 
+     由于返回类型是整数，小数部分将被舍去。
+
+* 自己的解答
+** 思路
+1. 开始想到从0遍历到x, 然后判断 ~i*i > a~ 得出是否成立,如果是,则返回 ~i-1~, 此方法是可以解, 但是如果给定的a过大,该算法会十分的慢.
+2. 后面在网上看到了牛顿迭代法的原理,做了一定理解,然后自己写出来实现了一次.
+3. 其中while循环判断的基准是 ~sum*sum - a~ 的绝对值为精度,当它小于1.0,对于该题已经满足,因为该题要求舍去小数.
+4. 每一次迭代,sum越接近a的平方根的值,当精度小于1时,返回当前sum的值(截断了小数部分).
+5. 牛顿迭代法的公式如下: $x(k+1)=\frac{x(k) + \frac{a}{x(k)}}{2}$ , 具体解释请看: [[https://blog.csdn.net/sunbobosun56801/article/details/78088085][牛顿迭代法]]
+   
+** 代码
+#+BEGIN_SRC java
+package algorithm.easy;
+
+public class MySqrt {
+    public static int solution(int a) {
+        double sum = a;
+        /**
+         * 牛顿迭代法: xk+1 = 1/2(xk + a/xk)
+         */
+        while (Math.abs(sum * sum - a) >= 1.0) {
+            sum = (a / sum + sum) / 2.0;
+        }
+        return (int) sum;
+    }
+
+    public static void main(String[] args) {
+        System.out.println(solution(8));
+        System.out.println(solution(1));
+        System.out.println(solution(0));
+        System.out.println(solution(6));
+        System.out.println(solution(2));
+        System.out.println(solution(3));
+    }
+}
+#+END_SRC
