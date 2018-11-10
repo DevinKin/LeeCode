@@ -4,6 +4,21 @@
 - [[https://www.cnblogs.com/devinkin/p/9843503.html][反转整数]]
 - [[https://www.cnblogs.com/devinkin/p/9853157.html][回文数]]
 - [[https://www.cnblogs.com/devinkin/p/9855023.html][罗马数字转整数]]
+- [[https://www.cnblogs.com/devinkin/p/9863480.html][最长公共前缀]]
+- [[https://www.cnblogs.com/devinkin/p/9867876.html][有效的括号]]
+- [[https://www.cnblogs.com/devinkin/p/9874116.html][合并两个有序链表]]
+- [[https://www.cnblogs.com/devinkin/p/9876241.html][删除排序数组中的重复项]]
+- [[https://www.cnblogs.com/devinkin/p/9882793.html][移除元素]]
+- [[https://www.cnblogs.com/devinkin/p/9890145.html][实现strStr()]]
+- [[https://www.cnblogs.com/devinkin/p/9899035.html][搜索插入位置]]
+- [[https://www.cnblogs.com/devinkin/p/9903367.html][报数]]
+- [[https://www.cnblogs.com/devinkin/p/9903903.html][最大子序列和]]
+- [[https://www.cnblogs.com/devinkin/p/9915465.html][最后一个单词的长度]]
+- [[https://www.cnblogs.com/devinkin/p/9916122.html][加一]]
+- [[https://www.cnblogs.com/devinkin/p/9918026.html][二进制求和]]
+- [[https://www.cnblogs.com/devinkin/p/9931391.html][x的平方根]]
+- [[https://www.cnblogs.com/devinkin/p/9939241.html][爬楼梯]]
+- [[https://www.cnblogs.com/devinkin/p/9939318.html][删除排序链表中的重复元素]]
 ** Medium
 
 ** Hard
