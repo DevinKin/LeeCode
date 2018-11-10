@@ -1,0 +1,77 @@
+#+TITLE: LeetCode-删除排序链表中的重复元素
+#+CATEGORIES: LeetCode
+#+DESCRIPTION: 每天一题LeetCode
+#+KEYWORDS: LeetCode,Java
+#+DATE: 2018-11-10 14:19
+
+* Easy-删除排序链表中的重复元素
+** 题目描述
+给定一个排序链表，删除所有重复的元素，使得每个元素只出现一次。
+
+** 示例 1:
+输入: 1->1->2
+
+输出: 1->2
+
+** 示例 2:
+输入: 1->1->2->3->3
+
+输出: 1->2->3
+
+
+* 自己的解答
+** 思路
+1. 遍历链表,如果链表的下一个节点不为空且元素的值与当前节点的值相同,则将当前节点的next指向下下个节点.
+2. 否则,当前节点往后移动一个节点的距离.
+** 代码
+#+BEGIN_SRC java
+  package algorithm.easy;
+
+  class ListNode {
+      int val;
+      ListNode next;
+
+      ListNode(int x) {
+          val = x;
+      }
+
+      ListNode(int... args) {
+          ListNode tmp = this;
+          for (int i = 0; i < args.length; i++) {
+              tmp.val = args[i];
+              if (i == args.length - 1)
+                  break;
+              tmp.next = new ListNode(args[i]);
+              tmp = tmp.next;
+          }
+      }
+  }
+  public class DeleteDuplicates {
+      public static ListNode solution(ListNode head) {
+          ListNode tmp = head;
+          while (tmp != null) {
+              if (tmp.next != null && tmp.next.val == tmp.val) {
+                  tmp.next = tmp.next.next;
+              } else {
+                  tmp = tmp.next;
+              }
+          }
+          return head;
+      }
+
+      public static void main(String[] args) {
+          ListNode listNodes = new ListNode(1, 1, 2,3,3);
+          printList(listNodes);
+          printList(solution(listNodes));
+      }
+
+      public static void printList(ListNode l) {
+          while (l != null) {
+              System.out.print(l.val + "->");
+              l = l.next;
+          }
+          System.out.print("null");
+          System.out.println();
+      }
+  }
+#+END_SRC
