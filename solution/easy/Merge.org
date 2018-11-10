@@ -1,0 +1,114 @@
+#+TITLE: LeetCode-合并两个有序数组
+#+CATEGORIES: LeetCode
+#+DESCRIPTION: 每天一题LeetCode
+#+KEYWORDS: LeetCode,Java
+#+DATE: 2018-11-10 15:59
+
+* 合并两个有序数组
+** 题目描述
+给定两个有序整数数组 nums1 和 nums2，将 nums2 合并到 nums1 中，使得 num1 成为一个有序数组。
+
+** 说明:
+初始化 nums1 和 nums2 的元素数量分别为 m 和 n。
+
+你可以假设 nums1 有足够的空间（空间大小大于或等于 m + n）来保存 nums2 中的元素。
+
+** 示例:
+输入:
+nums1 = [1,2,3,0,0,0], m = 3
+nums2 = [2,5,6],       n = 3
+
+输出: [1,2,2,3,5,6]
+
+* 自己的解答
+** 思路
+1. 将两个数组分别用两个索引进行遍历,并且对比两个数组的值,将小的一方的值放入一个新数组中.直到一方遍历完成即可.
+2. 最后将新数组的元素拷贝到nums1数组中.
+
+** 反思
+1. 用空间换取了时间,收效不理想,而且没有考虑到特殊情况.譬如m或n其中一个为0等问题.
+2. 想法是对的,但是没有认真审题.
+3. 从别人的代码中学到的解决方案:
+   - 首先nums1会出现0的占位元素,而且都出现在m处,所以可以用索引Pos反向遍历nums1.用i遍历nums1的非占位元素,用j遍历nums2的非占位元素.
+   - 为了避免nums1非占位元素与nums2非占位元素比较时,索引Pos与索引i冲突(进行交换的时候会覆盖掉nums1中未比较的元素).所以可以将i也反向遍历,即将nums1的前m个元素反转,从 ~i=m-1~ 开始遍历nums的元素.
+** 代码
+*** 自己的代码
+#+BEGIN_SRC java
+    public static void solution(int[] nums1, int m, int[] nums2, int n) {
+        if (n == 0) {
+            return;
+        }
+        if (m == 0) {
+            for (int i = 0; i < n; i++) {
+                nums1[i] = nums2[i];
+            }
+            return;
+        }
+
+        int[] res = new int[m + n];
+        // 遍历数组nums1
+        int i = 0;
+        // 遍历数组nums2
+        int j = 0;
+        // 遍历数组res
+        int k = 0;
+
+
+        while (i < m && j < n) {
+            res[k++] = nums1[i] < nums2[j] ? nums1[i++] : nums2[j++];
+            if (i >= m) {
+                // nums1到达尾部,将nums2中剩余的元素转移到res中
+                while (j < n) {
+                    res[k++] = nums2[j++];
+                }
+                break;
+            }
+            if (j >= n) {
+                // nums2到达尾部,将nums1中剩余的元素转移到res中
+                while (i < m) {
+                    res[k++] = nums1[i++];
+                }
+                break;
+            }
+        }
+
+        for (int l = 0; l < m + n; l++) {
+            nums1[l] = res[l];
+        }
+    }
+#+END_SRC
+*** 别人的代码
+#+BEGIN_SRC java
+class Solution {
+    public void merge(int[] nums1, int m, int[] nums2, int n) {
+        reverseArr(nums1,m);
+        int i = m-1;
+        int j = 0; 
+        int Pos = m+n-1;
+        while(i > -1 || j < n ){    // 哨兵法，此时用||
+            if(i > -1 && j < n ){
+                if(nums1[i] < nums2[j])
+                    nums1[Pos--] = nums1[i--];
+                else
+                    nums1[Pos--] = nums2[j++];
+            }
+            else if(i == -1)
+                nums1[Pos--] = nums2[j++];
+            else                               //j==n,剩下全取nums1
+                nums1[Pos--] = nums1[i--];
+        }
+        reverseArr(nums1,m+n);
+    }
+    
+    
+    
+    public void reverseArr(int[] arr,int len){
+        int temp;
+        for(int i = 0; i < len/2; i++){     //可以当结论记住，i < len/2 足矣
+            temp = arr[i];
+            arr[i] = arr[len-i-1];
+            arr[len-i-1] = temp;
+        }  
+    }
+}
+#+END_SRC
