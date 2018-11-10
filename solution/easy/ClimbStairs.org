@@ -1,0 +1,89 @@
+#+TITLE: LeetCode-爬楼梯
+#+CATEGORIES: LeetCode
+#+DESCRIPTION: 每天一题LeetCode
+#+KEYWORDS: LeetCode,Java
+#+DATE: 2018-11-10 13:54
+
+* Easy-爬楼梯
+假设你正在爬楼梯。需要 n 阶你才能到达楼顶。
+
+每次你可以爬 1 或 2 个台阶。你有多少种不同的方法可以爬到楼顶呢？
+
+注意：给定 n 是一个正整数。
+
+** 示例 1：
+
+输入： 2
+
+输出： 2
+
+解释： 有两种方法可以爬到楼顶。
+1.  1 阶 + 1 阶
+2.  2 阶
+
+** 示例 2：
+输入： 3
+
+输出： 3
+
+解释： 有三种方法可以爬到楼顶。
+1.  1 阶 + 1 阶 + 1 阶
+2.  1 阶 + 2 阶
+3.  2 阶 + 1 阶
+
+   
+* 自己的解答
+** 思路
+1. 首先想到的是排列组合,用元素 1 和 2 进行排列组合,使用公式 $C_n^m=\frac{A_n^m}{m!}=\frac{n!}{m!(n-m)!}=C_n^{n-m}$ , 其中 m 为 2 的个数, n 为 1 的个数,然后对排列组合的结果进行求和即可.
+** 反思
+1. 在给定 n 为 44 的时候, 排列组合的解法失效了,很奇怪,我现在还没想通.用for循环实现的公式我已经印证过没问题了,但在44和45的结果上就出问题了.
+2. 该题还有另一种解法,使用斐波那契数列即可,不过避免使用递归求斐波那契数列,运行时间会特别特变慢.使用数组存储斐波那契数即可.
+** 代码
+*** 自己的代码
+#+BEGIN_SRC java
+  public static int solution(int n) {
+      int nums = 0;
+      // 全1的情况
+      int sum = 1;
+      int nnums = 0;
+
+
+      int N = n;
+      while (N > 2) {
+          N -= 2;
+          nums++;
+          int subsum = 1;
+          // nums + N 为排列组合总数量
+          for (int i = 1; i <= nums; i++) {
+              subsum *= (nums + N - i + 1);
+              subsum /= i;
+          }
+          sum += subsum;
+      }
+
+      // 全2的情况
+      if (N % 2 == 0) {
+          sum += 1;
+      }
+
+      return sum;
+  }
+#+END_SRC
+*** 别人的解答
+#+BEGIN_SRC java
+    public static int solution2(int n) {
+        if (n == 1) {
+            return 1;
+        } else if (n == 2) {
+            return 2;
+        } else {
+            int[] ans = new int[n];
+            ans[0] = 1;
+            ans[1] = 2;
+            for (int i = 2; i < n; i++) {
+                ans[i] = ans[i - 1] + ans[i - 2];
+            }
+            return ans[n - 1];
+        }
+    }
+#+END_SRC
