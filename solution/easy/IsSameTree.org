@@ -1,0 +1,90 @@
+#+TITLE: LeetCode-Easy-相同的树
+#+CATEGORIES: LeetCode
+#+DESCRIPTION: 每天一题LeetCode
+#+KEYWORDS: LeetCode,Java
+#+DATE: 2018-11-11 20:29
+
+* Easy-相同的树
+** 题目描述
+给定两个二叉树，编写一个函数来检验它们是否相同。
+
+如果两个树在结构上相同，并且节点具有相同的值，则认为它们是相同的。
+
+** 示例 1:
+输入:       1         1
+          / \       / \
+         2   3     2   3
+
+        [1,2,3],   [1,2,3]
+
+输出: true
+
+** 示例 2:
+输入:      1          1
+          /           \
+         2             2
+
+        [1,2],     [1,null,2]
+
+输出: false
+
+** 示例 3:
+输入:       1         1
+          / \       / \
+         2   1     1   2
+
+        [1,2,1],   [1,1,2]
+
+输出: false
+
+
+* 自己的解答
+** 思路
+1. 使用递归法求解即可. 
+2. 先判断p树和q树是否都为null,如果是,返回true.
+3. p树和q树其中一个为null,返回false.
+4. p树和q树都不为null,比较其值是否相同,不同返回false.
+6. 如果值相同,则执行下面的递归代码,将p树的左子节点与和q树的左子节点比较,将p树的右子节点与和q树的右子节点比较.
+7. 最后返回左比较结果和右比较结果的与运算.
+8. 在函数首部添加一个判断条件,如果左比较结果和右比较结果其一有一个为false,则直接返回false.减少递归的部分开销.
+
+** 代码
+#+BEGIN_SRC java
+  package algorithm.easy;
+
+  class TreeNode {
+      int val;
+      TreeNode left;
+      TreeNode right;
+
+      TreeNode(int x) {
+          val = x;
+      }
+  }
+
+  public class IsSameTree {
+      private boolean lc = true;
+      private boolean rc = true;
+      public boolean solution(TreeNode p, TreeNode q) {
+          // 一旦有false,直接返回false
+          if (!(lc && rc)) {
+              return false;
+          }
+          // 如果p和q都为空树返回true
+          if (p == null && q == null) {
+              return true;
+          } else if ((p == null && q != null) || (p != null && q == null)) {
+              // p为空, q不为空
+              return false;
+          }
+          if (p.val != q.val) {
+              return false;
+          }
+
+          lc = solution(p.left, q.left);
+          rc = solution(p.right, q.right);
+          // 比较完成,均通过
+          return lc && rc;
+      }
+  }
+#+END_SRC
