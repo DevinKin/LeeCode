@@ -1,4 +1,4 @@
-#+TITLE: LeetCode-Easy-相同的树
+#+TITLE: LeetCode-相同的树
 #+CATEGORIES: LeetCode
 #+DESCRIPTION: 每天一题LeetCode
 #+KEYWORDS: LeetCode,Java
