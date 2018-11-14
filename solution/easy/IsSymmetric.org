@@ -1,0 +1,106 @@
+#+TITLE: LeetCode-对称二叉树
+#+CATEGORIES: LeetCode
+#+DESCRIPTION: 每天一题LeetCode
+#+KEYWORDS: LeetCode,Java
+#+DATE: 2018-11-14 00:06
+
+* Easy-对称二叉树
+** 题目描述
+给定一个二叉树，检查它是否是镜像对称的。
+
+例如，二叉树 [1,2,2,3,4,4,3] 是对称的。
+
+#+BEGIN_SRC dot :file ./img/tree1.png :cmdline -Kdot -Tpng
+  digraph test {
+  Root[label="1"];
+  Node1[label="2"];
+  Node2[label="2"];
+  Node3[label="3"];
+  Node4[label="4"];
+  Node5[label="4"];
+  Node6[label="3"];
+  Root -> Node1;
+  Root -> Node2;
+  Node1 -> Node3;
+  Node1 -> Node4;
+  Node2 -> Node5;
+  Node2 -> Node6;
+  }
+#+END_SRC
+
+#+RESULTS:
+[[file:./img/tree1.png]]
+
+
+但是下面这个 [1,2,2,null,3,null,3] 则不是镜像对称的:
+
+#+BEGIN_SRC dot :file ./img/tree2.png :cmdline -Kdot -Tpng
+  digraph tree2 {
+  Root[label="1"];
+  Node1[label="2"];
+  Node2[label="2"];
+  Node3[label="3"];
+  Node4[label="3"];
+  Node5[label="null"];
+  Node6[label="null"];
+  Root -> Node1;
+  Root -> Node2;
+  Node1 -> Node5;
+  Node2 -> Node6;
+  Node1 -> Node3;
+  Node2 -> Node4;
+  }
+#+END_SRC
+
+#+RESULTS:
+[[file:./img/tree2.png]]
+
+    1
+   / \
+  2   2
+   \   \
+   3    3
+
+* 自己的解答
+** 思路
+1. 这题跟之前做过的一道题非常类似,同样可以利用递归法解决. 参考 [[https://www.cnblogs.com/devinkin/p/9943365.html][LeetCode-相同的树]]
+** 代码
+#+BEGIN_SRC java
+  package algorithm.easy;
+
+  public class IsSymmetric {
+      public boolean solution(TreeNode root) {
+          if (root == null) {
+              return true;
+          } else {
+              return subCompare(root.left, root.right);
+          }
+      }
+
+      public boolean subCompare(TreeNode p, TreeNode q) {
+          boolean lc = false;
+          boolean rc = false;
+
+          // 如果p和q均为空,镜像对称,true
+          if (p == null && q == null) {
+              return true;
+          } else if (p != null && q != null) {
+              // 如果p和q都不为空,比较值是否相同,相同,递归遍历
+              if (p.val == q.val) {
+                  // 比较p的左和q的右是否一致
+                  lc = subCompare(p.left, q.right);
+                  // 比较q的左和p的右是否一致
+                  rc = subCompare(p.right, q.left);
+              } else {
+                  // 不同,不是镜像对称
+                  return false;
+              }
+          } else {
+              // 如果p和q其中一方为空,镜像不对称,false
+              return false;
+          }
+
+          return lc && rc;
+      }
+  }
+#+END_SRC
