@@ -55,12 +55,6 @@
 #+RESULTS:
 [[file:./img/tree2.png]]
 
-    1
-   / \
-  2   2
-   \   \
-   3    3
-
 * 自己的解答
 ** 思路
 1. 这题跟之前做过的一道题非常类似,同样可以利用递归法解决. 参考 [[https://www.cnblogs.com/devinkin/p/9943365.html][LeetCode-相同的树]]
