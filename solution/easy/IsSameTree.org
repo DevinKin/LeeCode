@@ -29,11 +29,24 @@
 输出: false
 
 ** 示例 3:
-输入:       1         1
-          / \       / \
-         2   1     1   2
+输入:  [1,2,1],   [1,1,2]
+#+BEGIN_SRC dot :file ./img/sametree1.png :cmdline -Kdot -Tpng
+digraph tree1 {
+Root1[label="1"];
+Root2[label="1"];
+Node1[label="2"];
+Node2[label="1"];
+Node3[label="1"];
+Node4[label="2"];
+Root1 -> Node1;
+Root1 -> Node2;
+Root2 -> Node3;
+Root2 -> Node4;
+}
+#+END_SRC
 
-        [1,2,1],   [1,1,2]
+#+RESULTS:
+[[file:./img/sametree1.png]]
 
 输出: false
 
