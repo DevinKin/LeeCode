@@ -11,26 +11,53 @@
 如果两个树在结构上相同，并且节点具有相同的值，则认为它们是相同的。
 
 ** 示例 1:
-输入:       1         1
-          / \       / \
-         2   3     2   3
+输入: [1,2,3],   [1,2,3]
+#+BEGIN_SRC dot :file ./img/sametree1.png :cmdline -Kdot -Tpng
+digraph tree1 {
+Root1[label="1"];
+Root2[label="1"];
+Node1[label="2"];
+Node2[label="3"];
+Node3[label="2"];
+Node4[label="3"];
+Root1 -> Node1;
+Root1 -> Node2;
+Root2 -> Node3;
+Root2 -> Node4;
+}
+#+END_SRC
 
-        [1,2,3],   [1,2,3]
+#+RESULTS:
+[[file:./img/sametree1.png]]
 
 输出: true
 
 ** 示例 2:
-输入:      1          1
-          /           \
-         2             2
+#+BEGIN_SRC dot :file ./img/sametree2.png :cmdline -Kdot -Tpng
+digraph tree1 {
+Root1[label="1"];
+Root2[label="1"];
+Node1[label="2"];
+Node2[label="null"];
+Node3[label="null"];
+Node4[label="2"];
+Root1 -> Node1;
+Root1 -> Node2;
+Root2 -> Node3;
+Root2 -> Node4;
+}
+#+END_SRC
 
-        [1,2],     [1,null,2]
+#+RESULTS:
+[[file:./img/sametree2.png]]
+
+输入: [1,2],     [1,null,2]
 
 输出: false
 
 ** 示例 3:
 输入:  [1,2,1],   [1,1,2]
-#+BEGIN_SRC dot :file ./img/sametree1.png :cmdline -Kdot -Tpng
+#+BEGIN_SRC dot :file ./img/sametree3.png :cmdline -Kdot -Tpng
 digraph tree1 {
 Root1[label="1"];
 Root2[label="1"];
@@ -46,7 +73,7 @@ Root2 -> Node4;
 #+END_SRC
 
 #+RESULTS:
-[[file:./img/sametree1.png]]
+[[file:./img/sametree3.png]]
 
 输出: false
 
